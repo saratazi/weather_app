@@ -1,4 +1,10 @@
 const API_KEY = "const API_KEY = "7268532aee7e97d242365d1753630c71";
+const locationBtn = document.getElementById("locationBtn");
+const feelsLike = document.getElementById("feelsLike");
+const visibility = document.getElementById("visibility");
+const sunrise = document.getElementById("sunrise");
+const sunset = document.getElementById("sunset");
+const date = document.getElementById("date");
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 const cityInput = document.getElementById("cityInput");
