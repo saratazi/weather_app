@@ -1,6 +1,3 @@
-const API_KEY = "const API_KEY = "7268532aee7e97d242365d1753630c71";
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
-
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
 const locationBtn = document.getElementById("locationBtn");
@@ -13,6 +10,7 @@ const cityName = document.getElementById("cityName");
 const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("windSpeed");
 const weatherIcon = document.getElementById("weatherIcon");
+
 const feelsLike = document.getElementById("feelsLike");
 const visibility = document.getElementById("visibility");
 const sunrise = document.getElementById("sunrise");
@@ -20,6 +18,112 @@ const sunset = document.getElementById("sunset");
 const description = document.getElementById("description");
 const date = document.getElementById("date");
 
+async function searchCity(city) {
+
+    try {
+
+        const geo = await fetch(
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`
+        );
+
+        const geoData = await geo.json();
+
+        if (!geoData.results) {
+
+            showError();
+            return;
+
+        }
+
+        const place = geoData.results[0];
+
+        getWeather(
+            place.latitude,
+            place.longitude,
+            place.name,
+            place.country
+        );
+
+    } catch {
+
+        showError();
+
+    }
+
+}
+
+async function getWeather(lat, lon, city, country) {
+
+    try {
+
+        const response = await fetch(
+
+`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code&daily=sunrise,sunset&timezone=auto`
+
+        );
+
+        const data = await response.json();
+
+        displayWeather(data, city, country);
+
+    } catch {
+
+        showError();
+
+    }
+
+}
+
+// GPS
+locationBtn.addEventListener("click", () => {
+
+    navigator.geolocation.getCurrentPosition(
+
+        (position) => {
+
+            getWeather(
+
+                position.coords.latitude,
+                position.coords.longitude,
+                "Current Location",
+                ""
+
+            );
+
+        },
+
+        () => {
+
+            alert("Location access denied.");
+
+        }
+
+    );
+
+});
+
+// Search
+searchBtn.addEventListener("click", () => {
+
+    const city = cityInput.value.trim();
+
+    if (city) {
+
+        searchCity(city);
+
+    }
+
+});
+
+cityInput.addEventListener("keydown", (e) => {
+
+    if (e.key === "Enter") {
+
+        searchBtn.click();
+
+    }
+
+});
 const weatherIcons = {
     "01":"https://openweathermap.org/img/wn/01d@2x.png",
     "02":"https://openweathermap.org/img/wn/02d@2x.png",
