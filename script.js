@@ -84,4 +84,28 @@ cityInput.addEventListener("keydown", (e) => {
 // Load a default city on page load
 window.addEventListener("load", () => {
     getWeather("London");
+feelsLike.textContent = `${Math.round(data.main.feels_like)}°C`;
+
+visibility.textContent = `${data.visibility / 1000} km`;
+
+sunrise.textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+
+sunset.textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+
+date.textContent = new Date().toLocaleDateString();
+locationBtn.addEventListener("click", () => {
+  navigator.geolocation.getCurrentPosition(async (position) => {
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const response = await fetch(
+      `${BASE_URL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    );
+
+    const data = await response.json();
+    displayWeather(data);
+
+  });
+});
 });
