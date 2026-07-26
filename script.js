@@ -1,14 +1,10 @@
 const API_KEY = "const API_KEY = "7268532aee7e97d242365d1753630c71";
-const locationBtn = document.getElementById("locationBtn");
-const feelsLike = document.getElementById("feelsLike");
-const visibility = document.getElementById("visibility");
-const sunrise = document.getElementById("sunrise");
-const sunset = document.getElementById("sunset");
-const date = document.getElementById("date");
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 
 const cityInput = document.getElementById("cityInput");
 const searchBtn = document.getElementById("searchBtn");
+const locationBtn = document.getElementById("locationBtn");
+
 const weatherInfo = document.getElementById("weatherInfo");
 const errorMsg = document.getElementById("errorMsg");
 
@@ -17,95 +13,179 @@ const cityName = document.getElementById("cityName");
 const humidity = document.getElementById("humidity");
 const windSpeed = document.getElementById("windSpeed");
 const weatherIcon = document.getElementById("weatherIcon");
+const feelsLike = document.getElementById("feelsLike");
+const visibility = document.getElementById("visibility");
+const sunrise = document.getElementById("sunrise");
+const sunset = document.getElementById("sunset");
+const description = document.getElementById("description");
+const date = document.getElementById("date");
 
 const weatherIcons = {
-    "01": "https://cdn-icons-png.flaticon.com/512/869/869869.png", // clear
-    "02": "https://cdn-icons-png.flaticon.com/512/1163/1163661.png", // few clouds
-    "03": "https://cdn-icons-png.flaticon.com/512/414/414927.png", // clouds
-    "04": "https://cdn-icons-png.flaticon.com/512/414/414927.png", // broken clouds
-    "09": "https://cdn-icons-png.flaticon.com/512/3351/3351979.png", // shower rain
-    "10": "https://cdn-icons-png.flaticon.com/512/3351/3351979.png", // rain
-    "11": "https://cdn-icons-png.flaticon.com/512/1146/1146860.png", // thunderstorm
-    "13": "https://cdn-icons-png.flaticon.com/512/642/642102.png", // snow
-    "50": "https://cdn-icons-png.flaticon.com/512/4005/4005901.png" // mist
+    "01":"https://openweathermap.org/img/wn/01d@2x.png",
+    "02":"https://openweathermap.org/img/wn/02d@2x.png",
+    "03":"https://openweathermap.org/img/wn/03d@2x.png",
+    "04":"https://openweathermap.org/img/wn/04d@2x.png",
+    "09":"https://openweathermap.org/img/wn/09d@2x.png",
+    "10":"https://openweathermap.org/img/wn/10d@2x.png",
+    "11":"https://openweathermap.org/img/wn/11d@2x.png",
+    "13":"https://openweathermap.org/img/wn/13d@2x.png",
+    "50":"https://openweathermap.org/img/wn/50d@2x.png"
 };
 
-async function getWeather(city) {
-    try {
-        const response = await fetch(
-            `${BASE_URL}?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`
-        );
+async function getWeather(city){
 
-        if (!response.ok) {
-            throw new Error("City not found");
+    try{
+
+        const response = await fetch(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
+
+        if(!response.ok){
+            throw new Error();
         }
 
         const data = await response.json();
+
         displayWeather(data);
-    } catch (err) {
-        showError();
+
+    }catch{
+
+        weatherInfo.classList.remove("show");
+        errorMsg.classList.add("show");
+
     }
+
 }
 
-function displayWeather(data) {
+async function getWeatherByLocation(lat,lon){
+
+    try{
+
+        const response = await fetch(`${BASE_URL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+
+        const data = await response.json();
+
+        displayWeather(data);
+
+    }catch{
+
+        alert("Unable to get weather.");
+
+    }
+
+}
+
+function displayWeather(data){
+
     errorMsg.classList.remove("show");
     weatherInfo.classList.add("show");
 
-    temperature.textContent = `${Math.round(data.main.temp)}°C`;
-    cityName.textContent = `${data.name}, ${data.sys.country}`;
-    humidity.textContent = `${data.main.humidity}%`;
-    windSpeed.textContent = `${Math.round(data.wind.speed * 3.6)} km/h`;
+    temperature.textContent=Math.round(data.main.temp)+"°C";
 
-    const iconCode = data.weather[0].icon.slice(0, 2);
-    weatherIcon.src = weatherIcons[iconCode] || weatherIcons["01"];
+    cityName.textContent=data.name+", "+data.sys.country;
+
+    humidity.textContent=data.main.humidity+"%";
+
+    windSpeed.textContent=Math.round(data.wind.speed*3.6)+" km/h";
+
+    feelsLike.textContent=Math.round(data.main.feels_like)+"°C";
+
+    visibility.textContent=(data.visibility/1000).toFixed(1)+" km";
+
+    description.textContent=data.weather[0].description;
+
+    weatherIcon.src=weatherIcons[data.weather[0].icon.slice(0,2)];
+
+    sunrise.textContent=new Date(data.sys.sunrise*1000).toLocaleTimeString([],{
+        hour:"2-digit",
+        minute:"2-digit"
+    });
+
+    sunset.textContent=new Date(data.sys.sunset*1000).toLocaleTimeString([],{
+        hour:"2-digit",
+        minute:"2-digit"
+    });
+
+    date.textContent=new Date().toDateString();
+
+    changeBackground(data.weather[0].main);
+
 }
 
-function showError() {
-    weatherInfo.classList.remove("show");
-    errorMsg.classList.add("show");
+function changeBackground(weather){
+
+    switch(weather){
+
+        case "Clear":
+            document.body.style.backgroundImage="url('clear.png')";
+            break;
+
+        case "Clouds":
+            document.body.style.backgroundImage="url('clouds.png')";
+            break;
+
+        case "Rain":
+            document.body.style.backgroundImage="url('rain.png')";
+            break;
+
+        case "Drizzle":
+            document.body.style.backgroundImage="url('drizzle.png')";
+            break;
+
+        case "Snow":
+            document.body.style.backgroundImage="url('snow.png')";
+            break;
+
+        case "Mist":
+        case "Fog":
+        case "Haze":
+            document.body.style.backgroundImage="url('mist.png')";
+            break;
+
+        default:
+            document.body.style.backgroundImage="url('clear.png')";
+    }
+
 }
 
-searchBtn.addEventListener("click", () => {
-    const city = cityInput.value.trim();
-    if (city) {
+searchBtn.addEventListener("click",()=>{
+
+    const city=cityInput.value.trim();
+
+    if(city){
+
         getWeather(city);
+
     }
+
 });
 
-cityInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        const city = cityInput.value.trim();
-        if (city) {
-            getWeather(city);
-        }
+cityInput.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Enter"){
+
+        searchBtn.click();
+
     }
+
 });
 
-// Load a default city on page load
-window.addEventListener("load", () => {
-    getWeather("London");
-feelsLike.textContent = `${Math.round(data.main.feels_like)}°C`;
+locationBtn.addEventListener("click",()=>{
 
-visibility.textContent = `${data.visibility / 1000} km`;
+    navigator.geolocation.getCurrentPosition((position)=>{
 
-sunrise.textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+        getWeatherByLocation(
+            position.coords.latitude,
+            position.coords.longitude
+        );
 
-sunset.textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+    });
 
-date.textContent = new Date().toLocaleDateString();
-locationBtn.addEventListener("click", () => {
-  navigator.geolocation.getCurrentPosition(async (position) => {
-
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-
-    const response = await fetch(
-      `${BASE_URL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    );
-
-    const data = await response.json();
-    displayWeather(data);
-
-  });
 });
-});
+
+window.onload = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+        getWeatherByLocation(
+            position.coords.latitude,
+            position.coords.longitude
+        );
+    });
+};
