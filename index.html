@@ -1,139 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather App</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<div class="card">
-
-    <h1 class="title">Weather App</h1>
-
+ 
+  <div class="card">
     <div class="search-box">
-
-        <input
-            type="text"
-            id="cityInput"
-            placeholder="Enter city name">
-
-        <button id="searchBtn">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-
-        <button id="locationBtn">
-            <i class="fa-solid fa-location-crosshairs"></i>
-        </button>
-
+      <input type="text" id="cityInput" placeholder="Enter city name">
+      <button id="searchBtn" title="Search">
+        <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search">
+      </button>
+      <button id="locationBtn" title="Use my location">
+        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="location">
+      </button>
     </div>
-
-    <div id="errorMsg" class="error">
-        City not found.
-    </div>
-
+ 
     <div class="weather-info" id="weatherInfo">
-
-        <img id="weatherIcon" src="" alt="Weather">
-
-        <h1 id="temperature">0°C</h1>
-
-        <h2 id="cityName">City</h2>
-
-        <p id="description"></p>
-
-        <div class="details">
-
-            <div class="detail">
-
-                <i class="fa-solid fa-temperature-half"></i>
-
-                <div>
-                    <span>Feels Like</span>
-                    <h3 id="feelsLike">0°C</h3>
-                </div>
-
-            </div>
-
-            <div class="detail">
-
-                <i class="fa-solid fa-droplet"></i>
-
-                <div>
-                    <span>Humidity</span>
-                    <h3 id="humidity">0%</h3>
-                </div>
-
-            </div>
-
+      <p class="date" id="date">--</p>
+      <img id="weatherIcon" src="" alt="weather icon">
+      <h1 id="temperature">--°C</h1>
+      <p class="description" id="description">--</p>
+      <h2 id="cityName">City Name</h2>
+ 
+      <div class="details">
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163657.png" alt="feels like">
+          <div>
+            <p id="feelsLike">--°C</p>
+            <span>Feels Like</span>
+          </div>
         </div>
-
-        <div class="details">
-
-            <div class="detail">
-
-                <i class="fa-solid fa-wind"></i>
-
-                <div>
-                    <span>Wind</span>
-                    <h3 id="windSpeed">0 km/h</h3>
-                </div>
-
-            </div>
-
-            <div class="detail">
-
-                <i class="fa-solid fa-eye"></i>
-
-                <div>
-                    <span>Visibility</span>
-                    <h3 id="visibility">0 km</h3>
-                </div>
-
-            </div>
-
+ 
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/728/728093.png" alt="humidity">
+          <div>
+            <p id="humidity">--%</p>
+            <span>Humidity</span>
+          </div>
         </div>
-
-        <div class="details">
-
-            <div class="detail">
-
-                <i class="fa-solid fa-sun"></i>
-
-                <div>
-                    <span>Sunrise</span>
-                    <h3 id="sunrise">--:--</h3>
-                </div>
-
-            </div>
-
-            <div class="detail">
-
-                <i class="fa-solid fa-moon"></i>
-
-                <div>
-                    <span>Sunset</span>
-                    <h3 id="sunset">--:--</h3>
-                </div>
-
-            </div>
-
+ 
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1146/1146858.png" alt="wind">
+          <div>
+            <p id="windSpeed">-- km/h</p>
+            <span>Wind Speed</span>
+          </div>
         </div>
-
-        <p class="date" id="date"></p>
-
+ 
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/2769/2769339.png" alt="visibility">
+          <div>
+            <p id="visibility">-- km</p>
+            <span>Visibility</span>
+          </div>
+        </div>
+ 
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/869/869869.png" alt="sunrise">
+          <div>
+            <p id="sunrise">--:--</p>
+            <span>Sunrise</span>
+          </div>
+        </div>
+ 
+        <div class="detail-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/4381/4381545.png" alt="sunset">
+          <div>
+            <p id="sunset">--:--</p>
+            <span>Sunset</span>
+          </div>
+        </div>
+      </div>
     </div>
-
-</div>
-
+ 
+    <div class="error" id="errorMsg">City not found. Please try again.</div>
+  </div>
+ 
 <script src="script.js"></script>
-
 </body>
 </html>
